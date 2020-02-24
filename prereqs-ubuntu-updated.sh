@@ -13,6 +13,12 @@
 # limitations under the License.
 #
 
+
+# This file belongs to Hyperledger Composer team. I have only modified the contents of this file. 
+# The original can be found on their GitHub repository as linked on their documentation page which can be found here: 
+# https://hyperledger.github.io/composer/latest/installing/installing-prereqs.html
+
+
 # Usage:
 #
 # ./prereqs-ubuntu-updated.sh
