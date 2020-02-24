@@ -1,37 +1,27 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/AdityaNambiar/tcethlfworkshop/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+# TCET Workshop Documentation on Hyperledger Fabric 
+## Getting Started
+- Create a folder to keep all of your fabric components together under one folder. We further refer to this folder as our 'project folder'.
+### Installing Hyperledger Composer and its developement tools
+- Refer [the official documentation page](https://hyperledger.github.io/composer/latest/installing/installing-prereqs.html) to know which prerequisites are being installed in the script below. The only issue with the script they provide is that its outdated and therefore we updated the script to make sure it does it correctly.
+1. Prerequisites
+- Download the prerequisites script added in this repository. [Click here](https://raw.githubusercontent.com/AdityaNambiar/tcethlfworkshop/master/prereqs-ubuntu-updated.sh) and press CTRL+S to save the bash script (as .sh file) in your project folder. 
+- Give the execute permission if needed and execute the script:
 ```
+$ chmod +x prereqs-ubuntu-updated.sh
+$ ./prereqs-ubuntu-updated.sh
+```
+  - The following should be seen on your terminal, marking successful completion of the script. Each tool **must** show its version as intended and nothing that says 'command not found' or similar.
+  ![Terminal Output](screenshots/termoutput.png)
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+2. Developement tools and bash scripts
+- Here we will be adding the composer tool and a folder that gives us few automated script to run composer's blockchain network. 
+- [Click here](https://hyperledger.github.io/composer/latest/installing/development-tools.html) to open the website which we are going to refer to.
+  - Download each one of them as listed under Step 1 till Step 4.
+  - Execute ./startFabric.sh file => This will start the hyperledger fabric.
+  - Now create the PeerAdmin Card:
+    - Execute the createPeerAdminCard.sh file 
+		  `./createPeerAdminCard.sh`
+      This will create a card name as PeerAdmin@hlfv1
 
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/AdityaNambiar/tcethlfworkshop/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+  
+    
