@@ -78,7 +78,7 @@ Command: `export PATH=<path to fabric-samples folder>/bin:$PATH`
 Example: export PATH=/home/<your_username>/fabric-samples/bin:$PATH  
 - (Point 2.b)  
 i. Put the number of peers (inclusive of all peers on the network) under 'Template -> Count:' in the crypto-config.yaml file as below:
-![crypto-config file](screenshots/cypto-config.png)  
+![crypto-config file](screenshots/crypto-config.png)  
 ii. Follow steps listed in the **howtobuild.txt** file. You can find this file under (if you did _not_ rename your developement tools folder i.e. fabric-dev-servers):
 `fabric-dev-servers/fabric-script/hlfv12/composer`  
   - Set the IPs of main peer and other peers.
