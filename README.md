@@ -55,17 +55,18 @@ $ ./prereqs-ubuntu-updated.sh
 ### Setting up Hyperledger Fabric for handling multiple peers:
 1. Prerequisites:  
   - This setup assumes you already have the single peer setup ready for your HLF project.  
-2. Stages:
-MAIN PEER SETUP:
+2. Stages:  
+MAIN PEER SETUP:  
   a. We need to download and install the binaries required from this website: [Install Samples, Binaries and Docker Images
-](https://hyperledger-fabric.readthedocs.io/en/release-1.4/install.html).
+](https://hyperledger-fabric.readthedocs.io/en/release-1.4/install.html).  
   b. Update the crypto-config.yaml to desired number of peers and generate that many certificates for them.
-  c. Generate new crypto material and create the genesis block. 
-  d. Add the orderer and peer TLS CA Certificates to PeerAdmin connection profile.
-  e. Update the `docker-compose.yaml` and `docker-compose-dev.yaml` file to recognize other peers.
-  f. Pass the entire 'fabric-script/' folder to the additional peers.
-OTHER PEER SETUP:
-  a. After obtaining the updated _fabric-scripts/_ folder from the MAIN
+  c. Generate new crypto material and create the genesis block.   
+  d. Add the orderer and peer TLS CA Certificates to PeerAdmin connection profile.  
+  e. Update the `docker-compose.yaml` and `docker-compose-dev.yaml` file to add other peers machine IPs under _extra_hosts_.  
+  f. Pass the entire 'fabric-script/' folder to the additional peers.  
+OTHER PEER SETUP:  
+  a. After obtaining the updated _fabric-scripts/_ folder from the Main Peer.  
+  b. Create and update the docker-compose-peerN.yaml as weel start-peerN.sh (where N = number of your peer) to add the IP of the main peer machine.
 
 3. Process:  
 - (Point 2.a)  
@@ -109,7 +110,7 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   For peer1:
   `"peer1.org1.example.com"`
   Again, change the suffix of 'peer' to add more peers as we did before.
-  ![Organization_Peers](screenshots/addpeerto_org.png)  
+  ![Organization_Peers](screenshots/addpeersto_org.png)  
   c. Add additional peers under (peers):
   For peer1:
   ```
@@ -127,7 +128,7 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   Again, change the suffix of 'peer' to add more peers as we did before (all occurences)
   ![Extra_Peers](screenshots/addpeers.png)
   d. Put the TLS CA Certificates for Orderer and Peers:
-  After obtaining the certificates from the command provided in the _howtobuild.txt_ file, add respective certificates to appropriate locations as follows:
+  After obtaining the certificates from the command provided in the _howtobuild.txt_ file, add respective certificates to appropriate locations as follows:  
   ![TLS_CA_Orderer](screenshots/orderercertlocation.png)
   ![TLS_CA_Peer0](screenshots/peer0certloc.png)  
   Similarly, for more peers:
