@@ -56,7 +56,7 @@ $ ./prereqs-ubuntu-updated.sh
 1. Prerequisites:  
   - This setup assumes you already have the single peer setup ready for your HLF project.  
 2. Stages:  
-MAIN PEER SETUP:  
+**MAIN PEER SETUP**:  
   a. We need to download and install the binaries required from this website: [Install Samples, Binaries and Docker Images
 ](https://hyperledger-fabric.readthedocs.io/en/release-1.4/install.html).  
   b. Update the crypto-config.yaml to desired number of peers and generate that many certificates for them.
@@ -64,12 +64,12 @@ MAIN PEER SETUP:
   d. Add the orderer and peer TLS CA Certificates to PeerAdmin connection profile.  
   e. Update the `docker-compose.yaml` and `docker-compose-dev.yaml` file to add other peers machine IPs under _extra_hosts_.  
   f. Pass the entire 'fabric-script/' folder to the additional peers.  
-OTHER PEER SETUP:  
+**OTHER PEER SETUP**:  
   a. After obtaining the updated _fabric-scripts/_ folder from the Main Peer.  
   b. Create and update the docker-compose-peerN.yaml as weel start-peerN.sh (where N = number of your peer) to add the IP of the main peer machine.
 
 3. Process:  
-- (Point 2.a)  
+- (Point 2.a - main peer setup)  
 i. Execute the following command for the fabric-samples folder to obtain the binaries ('bin/' folder) along with them:
 `curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.5 1.4.5 0.4.18`  
 ii. Except the 'bin/' folder, delete every other file and folder.  
@@ -77,7 +77,7 @@ iii. Add the path environment variable:
 This path determines where the crypto materials/fabric-tools and other dependencies of multipeer network are stored.
 Command: `export PATH=<path to fabric-samples folder>/bin:$PATH`
 Example: export PATH=/home/<your_username>/fabric-samples/bin:$PATH  
-- (Point 2.b)  
+- (Point 2.b - main peer setup)  
 i. Put the number of peers (inclusive of all peers on the network) under 'Template -> Count:' in the crypto-config.yaml file as below:
 ![crypto-config file](screenshots/crypto-config.png)  
 ii. Follow steps listed in the **howtobuild.txt** file. You can find this file under (if you did _not_ rename your developement tools folder i.e. fabric-dev-servers):
@@ -135,7 +135,71 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   ![TLS_CA_Peer1](screenshots/peer1certloc.png)
   
   This is how it should look like after adding the peers:
-  ![Expected_Output](screenshots/expectedoutput.png)
+  ![Expected_Output](screenshots/expectedoutput.png)  
+  e. Update the _docker-compose and docker-compose-dev YAML files_ under (fabric-scripts/hlfv12/composer/):
+  ![Composer_Yaml_files](screenshots/yamlfiles.png)  
+  Add the other machine IPs (in the format shown below) in **both the files** under (ca.example.com, orderer.example.com, peer0.org1.example.com):
+  ![extra_hosts](screenshots/extrahosts.png)  
+  For example, adding _extra_hosts_ to CA should look like:
+  ![CA_Extra_Hosts](screenshots/example_ca_extrahosts.png)  
+  f. Send '_fabric-scripts/_' to the other peers in the network.  
+  
+- (Point 2.a - other peer setup)  
+In the other peer, create _docker-compose-peerN.yaml_ and _start-peerN.sh_ under (/fabric-scripts/hlfv12/composer/) as seen below:
+![Other_peer_folder](screenshots/other_peer_files.png)
+Add the following to the docker-compose-peerN.yaml:
+For peer1, (change all occurences of peer1 in this code block to respective peer and **make sure to increment the port on the left of colon by thousand** and change all occurences of ports at respective places)
+```
+version: '2'
+
+services:
+  peer1.org1.example.com:
+    container_name: peer1.org1.example.com
+    image: hyperledger/fabric-peer:1.2.1
+    environment:
+      - CORE_LOGGING_LEVEL=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=DEBUG
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_PEER_ID=peer1.org1.example.com
+      - CORE_PEER_ADDRESS=peer1.org1.example.com:7051
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=composer_default
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/peer/msp
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./:/etc/hyperledger/configtx
+        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/peer/msp
+        - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
+    extra_hosts:
+      - "orderer.example.com:<Main peer IP>"
+      - "peer0.org1.example.com:<Main peer IP>"
+      - "ca.example.com:<Main peer IP>"
+    depends_on:
+      - couchdb1
+
+  couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb:0.4.10
+    ports:
+      - 6984:5984
+    environment:
+      DB_URL: http://localhost:6984/member_db
+```
+Update the _docker-compose-peer YAML files_ under (fabric-scripts/hlfv12/composer/):
+  ![Composer_Yaml_files](screenshots/yamlfiles.png)  
+Add the other machine IPs (in the format shown below) in **both the files** under (ca.example.com, orderer.example.com, peer0.org1.example.com) - look at the following for reference:
+  ![extra_hosts](screenshots/other_peer_extrahosts.png)  
+
+**NOTE**: Update the incremented ports of new peers in the createPeerAdminCard.sh's connection profile. 
+  
+  
 
 
 
