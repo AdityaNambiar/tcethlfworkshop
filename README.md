@@ -129,7 +129,7 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   ![Extra_Peers](screenshots/addpeers.png)
   d. Put the TLS CA Certificates for Orderer and Peers:
   After obtaining the certificates from the command provided in the _howtobuild.txt_ file, add respective certificates to appropriate locations as follows:  
-  ![TLS_CA_Orderer](screenshots/orderercertlocation.png)
+  ![TLS_CA_Orderer](screenshots/orderercertloc.png)
   ![TLS_CA_Peer0](screenshots/peer0certloc.png)  
   Similarly, for more peers:
   ![TLS_CA_Peer1](screenshots/peer1certloc.png)
