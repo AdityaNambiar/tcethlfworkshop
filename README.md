@@ -149,6 +149,7 @@ In the other peer, create _docker-compose-peerN.yaml_ and _start-peerN.sh_ under
 ![Other_peer_folder](screenshots/other_peer_files.png)  
 Add the following to the docker-compose-peerN.yaml:  
 For peer1, (change all occurences of peer1 in this code block to respective peer and **make sure to increment the port on the left of colon by thousand** and change all occurences of ports at respective places)  
+
 ```
 version: '2'
 
@@ -191,7 +192,8 @@ services:
       - 6984:5984
     environment:
       DB_URL: http://localhost:6984/member_db
-```  
+```
+  
 Update the _docker-compose-peer YAML files_ under (fabric-scripts/hlfv12/composer/):
   ![Composer_Yaml_files](screenshots/yamlfiles.png)  
 Add the other machine IPs (in the format shown below) in **both the files** under (ca.example.com, orderer.example.com, peer0.org1.example.com) - look at the following for reference:
