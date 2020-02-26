@@ -43,12 +43,10 @@ Parse_Arguments() {
 	done
 }
 
-HOST=<Main Machine IP>
-SECOND_HOST=<Peer1 Machine IP>
-THIRD_HOST=<Peer2 Machine IP>
-FOURTH_HOST=<Peer3 Machine IP>
-FIFTH_HOST=<Peer4 Machine IP>
-SIXTH_HOST=<Peer5 Machine IP>
+HOST=192.168.1.101
+SECOND_HOST=192.168.1.65
+#THIRD_HOST=<Peer2 Machine IP>
+#FOURTH_HOST=<Peer3 Machine IP>
 
 Parse_Arguments $@
 
@@ -81,24 +79,22 @@ else
     exit 1
 fi
 
-# Connection profile reference: https://hyperledger.github.io/composer/v0.19/reference/connectionprofile
-
 cat << EOF > DevServer_connection.json
 {
     "name": "hlfv1",
     "x-type": "hlfv1",
-    "x-commitTimeout": 1200,
+    "x-commitTimeout": 30000,
     "version": "1.0.0",
     "client": {
         "organization": "Org1",
         "connection": {
             "timeout": {
                 "peer": {
-                    "endorser": "1200",
-                    "eventHub": "1200",
-                    "eventReg": "1200"
+                    "endorser": "30000",
+                    "eventHub": "30000",
+                    "eventReg": "30000"
                 },
-                "orderer": "1200"
+                "orderer": "2400"
             }
         }
     },
@@ -113,27 +109,7 @@ cat << EOF > DevServer_connection.json
                    "chaincodeQuery": true,
                    "eventSource": true
                 },
-                "peer1.org1.example.com": {
-                   "endorsingPeer": true,
-                   "chaincodeQuery": true,
-                   "eventSource": true
-                },
-                "peer2.org1.example.com": {
-                   "endorsingPeer": true,
-                   "chaincodeQuery": true,
-                   "eventSource": true
-                },
-                "peer3.org1.example.com": {
-                   "endorsingPeer": true,
-                   "chaincodeQuery": true,
-                   "eventSource": true
-                },
-                "peer4.org1.example.com": {
-                   "endorsingPeer": true,
-                   "chaincodeQuery": true,
-                   "eventSource": true
-                },
-                "peer5.org1.example.com": {
+               "peer1.org1.example.com": {
                    "endorsingPeer": true,
                    "chaincodeQuery": true,
                    "eventSource": true
@@ -146,11 +122,7 @@ cat << EOF > DevServer_connection.json
             "mspid": "Org1MSP",
             "peers": [
                 "peer0.org1.example.com",
-                "peer1.org1.example.com",
-                "peer2.org1.example.com",
-                "peer3.org1.example.com",
-                "peer4.org1.example.com",
-                "peer5.org1.example.com"
+                "peer1.org1.example.com"
             ],
             "certificateAuthorities": [
                 "ca.org1.example.com"
@@ -164,7 +136,7 @@ cat << EOF > DevServer_connection.json
                "ssl-target-name-override": "orderer.example.com"
            },
            "tlsCACerts": {
-               "pem": ""
+               "pem": "-----BEGIN CERTIFICATE-----\nMIICQzCCAeqgAwIBAgIRAO2Lc18HjfLQBHacxBrZrsowCgYIKoZIzj0EAwIwbDEL\nMAkGA1UEBhMCVVMxEzARBgNVBAgTCkNhbGlmb3JuaWExFjAUBgNVBAcTDVNhbiBG\ncmFuY2lzY28xFDASBgNVBAoTC2V4YW1wbGUuY29tMRowGAYDVQQDExF0bHNjYS5l\neGFtcGxlLmNvbTAeFw0yMDAyMjYxNzE2MDBaFw0zMDAyMjMxNzE2MDBaMGwxCzAJ\nBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJh\nbmNpc2NvMRQwEgYDVQQKEwtleGFtcGxlLmNvbTEaMBgGA1UEAxMRdGxzY2EuZXhh\nbXBsZS5jb20wWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAATpt+OlcG0H0u25MkxU\nhSkfUuja/rxk9iY2zI5VPhNJaHjUcwcuFN1+JtKOlSdwXLVSiBTc/f919zitGmGo\nw1mUo20wazAOBgNVHQ8BAf8EBAMCAaYwHQYDVR0lBBYwFAYIKwYBBQUHAwIGCCsG\nAQUFBwMBMA8GA1UdEwEB/wQFMAMBAf8wKQYDVR0OBCIEIPRaUAZRqwSOWKcwfk+l\nTP8fbSdGn+94NLpNjJ96Cx5DMAoGCCqGSM49BAMCA0cAMEQCIFCK/uU6kGjMPNsl\nvfSoKjgqYR/86ni9Iw9FXd715jGcAiBGladBSZoiEqNow4EtETpAdC6mDgKGN3qe\nvIz1CQ7BZw==\n-----END CERTIFICATE-----\n"
            }
         }
     },
@@ -176,7 +148,7 @@ cat << EOF > DevServer_connection.json
                 "ssl-target-name-override": "peer0.org1.example.com"
             },
             "tlsCACerts": {
-                "pem": ""
+                "pem": "-----BEGIN CERTIFICATE-----\nMIICVzCCAf2gAwIBAgIQWyYlKschs5sVjKz53Q355DAKBggqhkjOPQQDAjB2MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz\nY2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMDAyMjYxNzE2MDBaFw0zMDAyMjMxNzE2\nMDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH\nEw1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD\nVQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D\nAQcDQgAETayQMRcwAberEdrtiz9nUiIg7EpyMBYiz/yb6ZzW8yRm9sDqqsp0qzIZ\njfgvgP4Mg+1S39V9SBn9rbv5+AWJiaNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud\nJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud\nDgQiBCA8pA9Y66sB2boO2tLONMMTjISM3izkSyJv9axshvg3kDAKBggqhkjOPQQD\nAgNIADBFAiEA/TT/Ktmb5syBlZpufQyEOhPVA42Vg2t24loJEsbzpzICIDoUmgq0\n4HlIrQSLmJT3/O1PXT4zjACFujflyG9tPmx+\n-----END CERTIFICATE-----\n"
             }
         },
         "peer1.org1.example.com": {
@@ -186,47 +158,7 @@ cat << EOF > DevServer_connection.json
                "ssl-target-name-override": "peer1.org1.example.com"
            },
            "tlsCACerts": {
-               "pem": ""
-           }
-        },
-        "peer2.org1.example.com": {
-           "url": "grpc://${THIRD_HOST}:9051",
-           "eventUrl": "grpc://${THIRD_HOST}:9053",
-           "grpcOptions": {
-               "ssl-target-name-override": "peer2.org1.example.com"
-           },
-           "tlsCACerts": {
-               "pem": ""
-           }
-        },
-        "peer3.org1.example.com": {
-           "url": "grpc://${FOURTH_HOST}:10051",
-           "eventUrl": "grpc://${FOURTH_HOST}:10053",
-           "grpcOptions": {
-               "ssl-target-name-override": "peer3.org1.example.com"
-           },
-           "tlsCACerts": {
-               "pem": ""
-           }
-        },
-        "peer4.org1.example.com": {
-           "url": "grpc://${FIFTH_HOST}:11051",
-           "eventUrl": "grpc://${FIFTH_HOST}:11053",
-           "grpcOptions": {
-               "ssl-target-name-override": "peer4.org1.example.com"
-           },
-           "tlsCACerts": {
-               "pem": ""
-           }
-        },
-        "peer5.org1.example.com": {
-           "url": "grpc://${SIXTH_HOST}:12051",
-           "eventUrl": "grpc://${SIXTH_HOST}:12053",
-           "grpcOptions": {
-               "ssl-target-name-override": "peer5.org1.example.com"
-           },
-           "tlsCACerts": {
-               "pem": ""
+               "pem": "-----BEGIN CERTIFICATE-----\nMIICVzCCAf2gAwIBAgIQWyYlKschs5sVjKz53Q355DAKBggqhkjOPQQDAjB2MQsw\nCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNU2FuIEZy\nYW5jaXNjbzEZMBcGA1UEChMQb3JnMS5leGFtcGxlLmNvbTEfMB0GA1UEAxMWdGxz\nY2Eub3JnMS5leGFtcGxlLmNvbTAeFw0yMDAyMjYxNzE2MDBaFw0zMDAyMjMxNzE2\nMDBaMHYxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQH\nEw1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBvcmcxLmV4YW1wbGUuY29tMR8wHQYD\nVQQDExZ0bHNjYS5vcmcxLmV4YW1wbGUuY29tMFkwEwYHKoZIzj0CAQYIKoZIzj0D\nAQcDQgAETayQMRcwAberEdrtiz9nUiIg7EpyMBYiz/yb6ZzW8yRm9sDqqsp0qzIZ\njfgvgP4Mg+1S39V9SBn9rbv5+AWJiaNtMGswDgYDVR0PAQH/BAQDAgGmMB0GA1Ud\nJQQWMBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MCkGA1Ud\nDgQiBCA8pA9Y66sB2boO2tLONMMTjISM3izkSyJv9axshvg3kDAKBggqhkjOPQQD\nAgNIADBFAiEA/TT/Ktmb5syBlZpufQyEOhPVA42Vg2t24loJEsbzpzICIDoUmgq0\n4HlIrQSLmJT3/O1PXT4zjACFujflyG9tPmx+\n-----END CERTIFICATE-----\n"
            }
         }
     },
@@ -239,7 +171,7 @@ cat << EOF > DevServer_connection.json
 }
 EOF
 
-PRIVATE_KEY="${DIR}"/composer/<Add the Private key output - 'Point 1.b' here>
+PRIVATE_KEY="${DIR}"/composer/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/56e6816d31f1d9d12536fa71165830aec6c8eaa4934e1037fcc671c5edda7f09_sk
 CERT="${DIR}"/composer/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/Admin@org1.example.com-cert.pem
 
 if [ "${NOIMPORT}" != "true" ]; then
