@@ -1,4 +1,5 @@
 # TCET Workshop Documentation on Hyperledger Fabric 
+## Website URL: https://adityanambiar.github.io/tcethlfworkshop/ 
 ## Getting Started
 - Create a folder to keep all of your fabric components together under one folder. We further refer to this folder as our 'project folder'.
 ### Installing Hyperledger Composer and its developement tools
@@ -138,17 +139,18 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   ![Expected_Output](screenshots/expectedoutput.png)  
   e. Update the _docker-compose and docker-compose-dev YAML files_ under (fabric-scripts/hlfv12/composer/):
   ![Composer_Yaml_files](screenshots/yamlfiles.png)  
-  Add the other machine IPs (in the format shown below) in **both the files** under (ca.example.com, orderer.example.com, peer0.org1.example.com):
-  ![extra_hosts](screenshots/extrahosts.png)  
-  For example, adding _extra_hosts_ to CA should look like:
+  Add the other machine IPs (in the format shown below) in **both the files** under (ca.example.com, orderer.example.com, peer0.org1.example.com):  
+  ![extra_hosts](screenshots/extrahosts.png)   
+  For example, adding _extra_hosts_ to CA should look like:  
   ![CA_Extra_Hosts](screenshots/example_ca_extrahosts.png)  
   f. Send '_fabric-scripts/_' to the other peers in the network.  
   
 - (Point 2.a - other peer setup)  
-In the other peer, create _docker-compose-peerN.yaml_ and _start-peerN.sh_ under (/fabric-scripts/hlfv12/composer/) as seen below:
-![Other_peer_folder](screenshots/other_peer_files.png)
-Add the following to the docker-compose-peerN.yaml:
-For peer1, (change all occurences of peer1 in this code block to respective peer and **make sure to increment the port on the left of colon by thousand** and change all occurences of ports at respective places)
+In the other peer, create _docker-compose-peerN.yaml_ and _start-peerN.sh_ under (/fabric-scripts/hlfv12/composer/) as seen below:  
+![Other_peer_folder](screenshots/other_peer_files.png)  
+Add the following to the docker-compose-peerN.yaml:  
+For peer1, (change all occurences of peer1 in this code block to respective peer and **make sure to increment the port on the left of colon by thousand** and change all occurences of ports at respective places)  
+
 ```
 version: '2'
 
@@ -192,11 +194,11 @@ services:
     environment:
       DB_URL: http://localhost:6984/member_db
 ```
+  
 Update the _docker-compose-peer YAML files_ under (fabric-scripts/hlfv12/composer/):
   ![Composer_Yaml_files](screenshots/yamlfiles.png)  
 Add the other machine IPs (in the format shown below) in **both the files** under (ca.example.com, orderer.example.com, peer0.org1.example.com) - look at the following for reference:
-  ![extra_hosts](screenshots/other_peer_extrahosts.png)  
-
+  ![extra_hosts](screenshots/other_peer_extrahosts.png)    
 **NOTE**: Update the incremented ports of new peers in the createPeerAdminCard.sh's connection profile. 
   
   
