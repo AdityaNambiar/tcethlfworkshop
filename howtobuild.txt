@@ -1,28 +1,28 @@
-## Regenerate crypto material if crypto config or structure changes:
+1. Regenerate crypto material if crypto config or structure changes:
 
   rm -rf crypto-config
   cryptogen generate --config=./crypto-config.yaml
   
-  - Update services/ca.org1.example.com/command section of docker-composer.yml and docker-compose-dev.yml to refer to correct ca.keyfile:
+  a. Update services/ca.org1.example.com/command section of docker-composer.yml and docker-compose-dev.yml to refer to correct ca.keyfile:
     basename $(ls -1 crypto-config/peerOrganizations/org1.example.com/ca/*_sk)
 
-  - Update PRIVATE_KEY value in ../createPeerAdminCard.sh to refer to correct private key file:
+  b. Update PRIVATE_KEY value in ../createPeerAdminCard.sh to refer to correct private key file:
     ls -1 crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/*_sk
 
-## Setup Connection Profile in the createPeerAdminCard.sh file:
-  To get the value of 'Orderer's TLS CA Cert' we will execute this:
+2. Setup Connection Profile in the createPeerAdminCard.sh file:
+  a. To get the value of 'Orderer's TLS CA Cert' we will execute this:
 
   awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/ca.crt
 
-  To get the value of 'Peer TLS CA cert' we will execute this in terminal:
+  b. To get the value of 'Peer TLS CA cert' we will execute this in terminal:
 
-  For peer0 (observe the peer0.org1 … part - change the number at the suffix of "peer" for all other peers to fetch appropriate certificates for them):
+  - For peer0 (observe the peer0.org1 … part - change the number at the suffix of "peer" for all other peers to fetch appropriate certificates for them):
   awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
 
   Example, for peer1:
   awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}' crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
 
-## Regenerate genesis block and create channel transaction if configtx.yaml changes:
+3. Regenerate genesis block and create channel transaction if configtx.yaml changes:
 
   export FABRIC_CFG_PATH=$PWD
   configtxgen -profile ComposerOrdererGenesis -outputBlock ./composer-genesis.block
