@@ -67,7 +67,7 @@ $ ./prereqs-ubuntu-updated.sh
   f. Pass the entire 'fabric-script/' folder to the additional peers.  
 **OTHER PEER SETUP**:  
   a. After obtaining the updated _fabric-scripts/_ folder from the Main Peer.  
-  b. Create and update the docker-compose-peerN.yaml as weel start-peerN.sh (where N = number of your peer) to add the IP of the main peer machine.
+  b. Download templates of the docker-compose-peer1.yaml as well as start-peer1.sh to add the IP of the main peer machine.
 
 3. Process:  
 - (Point 2.a - main peer setup)  
@@ -158,7 +158,7 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   f. Send '_fabric-scripts/_' to the other peers in the network.  
   
 - (Point 2.a - other peer setup)  
-In the other peer, download the _docker-compose-peerN.yaml_ and _start-peerN.sh_ , from this git repo's template folder, under (/fabric-scripts/hlfv12/composer/) as seen below:  
+In the other peer, download the _docker-compose-peerN.yaml_ and _start-peerN.sh_ , from this git repo's template folder, under (**/fabric-scripts/hlfv12/composer/** - no other path) as seen below:  
 ![Other_peer_folder](screenshots/other_peer_files.png)  
 Add the following to the docker-compose-peerN.yaml (refer to the template):  
 For peer1, (change all occurences of peer1 in this code block to respective peer and **make sure to increment the port on the left of colon by thousand** and change all occurences of ports at respective places)  
