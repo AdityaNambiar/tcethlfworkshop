@@ -28,7 +28,7 @@ services:
     extra_hosts:
       - "orderer.example.com:<Main Peer IP>"
       - "peer0.org1.example.com:<Main Peer IP>"
-      - "ca.example.com:<Main Peer IP>"
+      - "ca.org1.example.com:<Main Peer IP>"
     depends_on:
       - couchdbN
 
