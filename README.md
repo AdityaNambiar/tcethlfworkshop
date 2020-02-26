@@ -71,8 +71,8 @@ $ ./prereqs-ubuntu-updated.sh
 
 3. Process:  
 - (Point 2.a - main peer setup)  
-i. Execute the following command for the fabric-samples folder to obtain the binaries ('bin/' folder) along with them:
-`curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.5 1.4.5 0.4.18`  
+i. Execute the following command for the fabric-samples folder to obtain the binaries ('bin/' folder) along with them (use the below command to skip download of fabric's 1.4 docker images and undesired examples):
+`curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.5 1.4.5 0.4.18 -s -d`  
 ii. Except the 'bin/' folder, delete every other file and folder.  
 iii. Add the path environment variable:
 This path determines where the crypto materials/fabric-tools and other dependencies of multipeer network are stored.
@@ -105,6 +105,18 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
                    "eventSource": true
     },
   ```
+  Also update the syntax of orderer to:
+  ```
+   "orderer.example.com": {
+            "url": "grpc://${HOST}:7050",
+            "grpcOptions": {
+               "ssl-target-name-override": "orderer.example.com"
+           },
+           "tlsCACerts": {
+               "pem": ""
+           }
+        }
+  ```
   **NOTE**: Make sure to follow the JSON syntax. Your Peer Admin card won't be able to deploy if you have an error in this connection profile. Use a [JSONlinter](https://jsonlint.com/) tool to rectify your errors by copying and pasting the entire JSON formatted text in the JSONLint. A simple incorrectly placed comma or curly bracket can cause script to halt. 
   ![Channel_Peers](screenshots/addpeerstochannel.png)  
   b. Add additional peers under (organizations -> Org1 -> peers):
@@ -124,16 +136,16 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
            "tlsCACerts": {
                "pem": "< Peer1 TLS CA Certificate >"
            }
-        },
+        }
   ```
   Again, change the suffix of 'peer' to add more peers as we did before (all occurences)
-  ![Extra_Peers](screenshots/addpeers.png)
+  ![Extra_Peers](screenshots/addpeers.png)  
   d. Put the TLS CA Certificates for Orderer and Peers:
   After obtaining the certificates from the command provided in the _howtobuild.txt_ file, add respective certificates to appropriate locations as follows:  
-  ![TLS_CA_Orderer](screenshots/orderercertloc.png)
+  ![TLS_CA_Orderer](screenshots/orderercertloc.png)  
   ![TLS_CA_Peer0](screenshots/peer0certloc.png)  
   Similarly, for more peers:
-  ![TLS_CA_Peer1](screenshots/peer1certloc.png)
+  ![TLS_CA_Peer1](screenshots/peer1certloc.png)  
   
   This is how it should look like after adding the peers:
   ![Expected_Output](screenshots/expectedoutput.png)  
@@ -146,9 +158,9 @@ ii. Follow steps listed in the **howtobuild.txt** file. You can find this file u
   f. Send '_fabric-scripts/_' to the other peers in the network.  
   
 - (Point 2.a - other peer setup)  
-In the other peer, create _docker-compose-peerN.yaml_ and _start-peerN.sh_ under (/fabric-scripts/hlfv12/composer/) as seen below:  
+In the other peer, download the _docker-compose-peerN.yaml_ and _start-peerN.sh_ , from this git repo's template folder, under (/fabric-scripts/hlfv12/composer/) as seen below:  
 ![Other_peer_folder](screenshots/other_peer_files.png)  
-Add the following to the docker-compose-peerN.yaml:  
+Add the following to the docker-compose-peerN.yaml (refer to the template):  
 For peer1, (change all occurences of peer1 in this code block to respective peer and **make sure to increment the port on the left of colon by thousand** and change all occurences of ports at respective places)  
 
 ```
