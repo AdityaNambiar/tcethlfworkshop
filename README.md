@@ -72,7 +72,7 @@ $ ./prereqs-ubuntu-updated.sh
 3. Process:  
 - (Point 2.a - main peer setup)  
 i. Execute the following command for the fabric-samples folder to obtain the binaries ('bin/' folder) along with them (use the below command to skip download of fabric's 1.4 docker images and undesired examples):
-`curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.5 1.4.5 0.4.18 -s -d`  
+`curl -sSL http://bit.ly/2ysbOFE | bash -s -- 1.4.5 1.4.5 0.4.18`  
 ii. Except the 'bin/' folder, delete every other file and folder.  
 iii. Add the path environment variable:
 This path determines where the crypto materials/fabric-tools and other dependencies of multipeer network are stored.
