@@ -1,0 +1,13 @@
+Add new participant :
+
+composer participant add -d '{"$class":"org.erp.participant.Admin","pIdentifier":"admin1001","fname":"sandip","lname":"mandal","dob":"07-12-1992","phone":"8467453645","email":"sandip@gmail.com","pType":"Admin"}' -c admin@erp
+
+Issuing the identities :
+composer identity issue -u admin1001 -a org.erp.participant.Admin#admin1001 -c admin@erp
+
+composer card import -f admin1001@erp.card
+
+Ping the network :
+composer network ping -c admin1001@erp
+
+
