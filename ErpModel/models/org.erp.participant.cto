@@ -1,0 +1,27 @@
+namespace org.erp.participant
+  
+abstract participant ErpParticipant identified by pIdentifier {
+  o String pIdentifier
+  o String pType
+  o String fname
+  o String lname
+  o String dob
+  o String phone
+  o String email
+
+}
+participant NetworkAdmin extends ErpParticipant{
+  
+}
+participant Principal extends ErpParticipant {
+
+}
+participant Admin extends ErpParticipant {
+
+}
+participant Student extends ErpParticipant {
+
+}
+
+
+

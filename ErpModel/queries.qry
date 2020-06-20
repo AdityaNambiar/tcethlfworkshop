@@ -1,0 +1,11 @@
+query getAllStudents {
+  description: "Select all students"
+  statement:
+      SELECT org.erp.participant.Student
+}
+
+query getNotices{
+	description: "Select all notices"
+  statement:
+      SELECT org.erp.assets.Notice
+}

@@ -1,0 +1,139 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+rule NetworkUserStudent{
+    description: "Grant business network Student full access to user resources"
+    participant: "org.erp.participant.Student"
+    operation: READ
+    resource: "**"
+    action: ALLOW
+}
+rule NetworkUserAdmin{
+    description: "Grant participant Admin full access to user resources"
+    participant: "org.erp.participant.Admin"
+    operation: READ
+    resource: "**"
+    action: ALLOW
+}
+
+rule NoticePermissionForAdmin{
+    description: "Grant Only Admin to perform CRUD operation on NOTICE"
+    participant: "org.erp.participant.Admin"
+    operation: ALL
+    resource: "org.erp.assets.Notice"
+    action: ALLOW 
+}
+
+rule CreateNoticePermissionForAdmin{
+    description: "Grant Only Admin to perform CRUD operation on NOTICE"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE
+    resource: "org.erp.assets.createNotice"
+    action: ALLOW 
+}
+rule ReadNoticePermissionForAdmin{
+    description: "Grant Only Admin to perform CRUD operation on NOTICE"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE
+    resource: "org.erp.assets.readNotices"
+    action: ALLOW 
+}
+
+rule UpdateNoticePermissionForAdmin{
+    description: "Grant Only Admin to perform CRUD operation on NOTICE"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE,UPDATE
+    resource: "org.erp.assets.updateNotice"
+    action: ALLOW 
+}
+rule DeleteNoticePermissionForAdmin{
+    description: "Grant Only Admin to perform CRUD operation on NOTICE"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE
+    resource: "org.erp.assets.deleteNotice"
+    action: ALLOW 
+}
+rule NoticePermissionForStudent{
+    description: "Grant Student to perform Only Read operation on NOTICE"
+    participant: "org.erp.participant.Student"
+    operation: READ
+    resource: "org.erp.assets.Notice"
+    action: ALLOW 
+}
+rule ReadNoticePermissionForStudent{
+    description: "Grant Student to perform Only Read operation on NOTICE"
+    participant: "org.erp.participant.Student"
+    operation: CREATE
+    resource: "org.erp.assets.readNotices"
+    action: ALLOW 
+}
+
+rule ReadStudentPermissionForStudent{
+    description: "Grant Student to Perform ReadStudent Transaction"
+    participant: "org.erp.participant.Student"
+    operation: CREATE
+    resource: "org.erp.assets.readStudent"
+    action: ALLOW 
+}
+rule getAllStudentsPermissionForAdmin{
+    description: "Grant Admin to Perform getAllStudents Transaction"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE
+    resource: "org.erp.assets.getAllStudents"
+    action: ALLOW 
+}
+rule deleteStudentTransactionPermissionForAdmin{
+    description: "Grant Admin to perform delete Student Transaction"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE
+    resource: "org.erp.assets.deleteParticipant"
+    action: ALLOW 
+}
+rule deleteStudentParticipantPermissionForAdmin{
+    description: "Grant Admin to delete participant Student"
+    participant: "org.erp.participant.Admin"
+    operation: DELETE
+    resource: "org.erp.participant.Student"
+    action: ALLOW 
+}
+rule HistorianRecordToAdmin{
+  description: "Grant Admin to record transaction on Historian"
+    participant: "org.erp.participant.Admin"
+    operation: CREATE
+    resource: "org.hyperledger.composer.system.HistorianRecord"
+    action: ALLOW 
+}
+
+rule HistorianRecordToStudent{
+  description: "Grant Student to record transaction on Historian"
+    participant: "org.erp.participant.Student"
+    operation: CREATE
+    resource: "org.hyperledger.composer.system.HistorianRecord"
+    action: ALLOW 
+}

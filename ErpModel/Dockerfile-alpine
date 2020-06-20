@@ -1,0 +1,85 @@
+I had to manually build the image so that docker in docker would work same as in in this video: 
+https://www.youtube.com/watch?v=b35zxtcuGq4
+Dockerfile approach was not working because of docker not being able to fetch docker.sock (because I had (to my knowledge) no way to map it during docker image build) 
+as well as not being able to have "privileged" access (the '--privileged' flag which we apply to containers or docker-compose exec)
+to alpine's system resources.
+
+So I have built a base image that simply loads the default composer containers on host using the bind mount of docker.sock coming from host themself.
+This image is useful when we want to simply have our hlf-composer application dockerized, making it portable & independent as well, 
+providing our own chaincode and model files after keeping this base image.
+So yeah, use this image if you want to dockerize your Hyperledger Fabric-Composer application and host it somewhere (my usecase)
+
+Workdir name will be ErpModel so if you want to change it, I've uploaded it this image on GitHub. 
+Create 0.1 version with your own workdir (take base image as:- 'docker:19.03.11' ) and you can follow rest of the commands.  
+
+FROM adinambiar24/hlfcomposer-mjrproj:0.1
+
+WORKDIR /ErpModel/
+# Installing OS tools before moving ahead:
+# I'm also bringing in all packages from prereqs script because they used to get installed for every change I made in the script 
+
+# *************************** PREREQS *******************************
+RUN apk update 
+RUN apk add --no-cache bash curl wget git unzip \
+    alpine-sdk openrc \
+    iptables build-base libressl-dev ca-certificates gnupg
+
+# RUN wget 'https://nodejs.org/download/release/v8.9.4/node-v8.9.4-linux-arm64.tar.gz'  && \
+#     tar -xvzf node-v8.9.4-linux-arm64.tar.gz && \
+#     ls -al node-v8.9.4-linux-arm64/bin/
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.7/main/ nodejs=8.9.3-r1 && \
+    node -v
+
+# *************************** PREREQS *******************************
+
+# *************** 
+# 1. Install binaries of Fabric v1.2 (adding '-s' so that it does not download 'fabric-samples/' - binaries are downloaded seperately in this case)
+# ****************
+
+COPY scripts scripts
+
+# *********** UNTIL THIS POINT adinambiar24/hlfcomposer-mjrproj:0.2 IS BUILT *************
+
+
+# Using the below shell script to run lot of commands is a pain because any single small change leads to doing everything else on the file to repeat itself costing me my internet.
+# RUN ./scripts/prereqs-ubuntu-updated.sh
+# Above prereqs will install docker as well so I'll have to keep fabric installation after this
+RUN curl -sSL http://bit.ly/2ysbOFE | bash -s 1.2.1 1.2.1 0.4.10 -s
+
+# The above prereqs script requires a machine reboot
+# (With reference to) https://stackoverflow.com/questions/39712359/how-do-you-install-something-that-needs-restart-in-a-dockerfile
+# All the layers of a image (in the image building process) are seperate containers linked with previous layers
+# This should mean that subsequent commands / layers should already get a 'rebooted' version with docker and stuff properly installed.
+
+# ***************** 
+# 2. Install composer and also set up developement environment 
+# https://hyperledger.github.io/composer/latest/installing/development-tools.html
+# *****************
+
+# Step 1:
+# Below node version must be 8.9 - expected in output:
+RUN node -v 
+RUN apk add --no-cache python2
+RUN npm install -g composer-cli@0.20
+# Step 4 (1):
+RUN mkdir ~/fabric-dev-servers && cd ~/fabric-dev-servers && \
+    curl -O https://raw.githubusercontent.com/hyperledger/composer-tools/master/packages/fabric-dev-servers/fabric-dev-servers.tar.gz && \
+    unzip fabric-dev-servers.zip
+
+# Step 4 (2):
+# As per the official documentation for composer (link above), 
+# this step also has an environment variable named FABRIC_VERSION. I've added that in docker-compose.yml.
+RUN cd ~/fabric-dev-servers && \
+    ./downloadFabric.sh
+
+# *********** UNTIL THIS POINT adinambiar24/hlfcomposer-mjrproj:0.3 IS BUILT *************
+
+FROM adinambiar24/hlfcomposer-mjrproj:0.3
+
+# 3. Copy over all files from host (from ErpModel) to docker
+COPY . .
+# setup node_modules:
+RUN npm i
+
+# N. Use Entrypoint script to setupFabric and stopFabric when container is closing.
+ENTRYPOINT [ "./entrypoint-composer.sh" ]

@@ -1,0 +1,82 @@
+version: '3.7'
+
+services:
+  erpFrontend:
+    container_name: erpfrontend
+    build: 
+      context: ErpFrontend/
+      dockerfile: Dockerfile
+    image: adinambiar24/erpfrontend:0.1
+    ports:
+      - "3000:3000"
+    networks:
+      - composer_default
+    volumes:
+      - erp-frontend:/ErpFrontend/
+
+  erpNodesvr:
+    container_name: erpnodesvr
+    image: adinambiar24/erpnodesvr:0.1
+    build: 
+      context: ErpMiddleware/
+      dockerfile: Dockerfile
+    environment:
+      - erp_jwtPrivateKey=$ERP_JWTPRIVKEY
+    ports:
+      - "5000:5000"
+    networks:
+      - composer_default
+    volumes:
+      - erp-nodesvr:/ErpMiddleware/
+      - dotComposer:/.composer/
+
+  erpFabric:
+    container_name: erphlf
+    image: adinambiar24/erphlf:0.1
+    build: 
+      context: ErpModel/
+      dockerfile: Dockerfile
+    privileged: true
+    environment: 
+      - FABRIC_VERSION=hlfv12 # Used before ./downloadFabric (check Dockerfile in ErpModel/)
+    ports:
+      - "5000:5000"
+    networks:
+      - composer_default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Bind mount docker socket of host machine so that containers will be ran on host itself
+      - erp-fabric:/ErpModel/
+      - dotComposer:/.composer/
+
+  # devopschain-ipfs:
+  #   container_name: devopschain-ipfs
+  #   image: adinambiar24/devopschain-ipfs:0.1
+  #   ports: 
+  #     - "5001:5001"
+  #   networks:
+  #     - composer_default
+  #   volumes: 
+  #     - devopschain-ipfs:/.ipfs/
+
+  # devopschain-ipfssvr:
+  #   container_name: devopschain-ipfssvr
+  #   image: adinambiar24/devopschain-ipfssvr:0.1
+  #   ports:
+  #     - "5002:5002"
+  #   networks:
+  #     - composer_default
+  #   volumes:
+  #     - devopschain-ipfssvr:/ipfs/
+
+volumes:
+  erp-frontend:
+  erp-nodesvr:
+  erp-fabric:
+  dotComposer:
+networks:
+  composer_default:
+    external: true
+    name: composer_default
+
+
+

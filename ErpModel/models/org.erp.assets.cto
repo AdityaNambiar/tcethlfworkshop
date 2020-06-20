@@ -1,0 +1,137 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.erp.assets
+import org.erp.participant.ErpParticipant
+
+
+transaction createStudent {
+  o String pType
+  o String pIdentifier
+  o String fname
+  o String lname
+  o String dob
+  o String phone
+  o String email
+  
+}
+
+event participantCreated {
+  o String pregistry
+  
+}
+
+transaction readStudent{
+  o String studentID
+}
+event studentRead{
+  o String studentdetail
+}
+
+asset Notice identified by nID {
+  o String nID
+  o String desc
+  o String datetime
+  --> ErpParticipant creator
+}
+
+event noticeCreated {
+  o String notice
+}
+
+transaction createNotice {
+  o String nID
+  o String desc
+  o String datetime
+
+}
+
+// event NoticeCreated {
+//   o String nID
+//   o String desc
+//   o String datetime
+//   --> ErpParticipant creator
+// }
+
+transaction readNotices {
+
+}
+
+event NoticeRead {
+  o String notices
+}
+
+transaction updateNotice {
+  o String nID
+  o String desc
+
+}
+
+event NoticeUpdated {
+  o String updatedNotice
+ 
+}
+
+transaction deleteNotice{
+  o String nID
+}
+event noticeDeleted{
+o String deletedNotice
+}
+
+transaction getAllStudents{
+
+}
+event allStudents{
+  o String students
+}
+
+transaction deleteParticipant {
+  o String pIdentifier
+  o String pType
+}
+
+event studentDeleted{
+  o String pregistry
+}
+// asset StudentDetails identified by studentID {
+//   o String studentID
+//   o String fname
+//   o String lname
+//   o String dob
+//   o String phone
+//   o String email
+//   --> ErpParticipant creator
+// }
+ 
+
+// transaction updateStudent {
+//   o String fname
+//   o String lname
+//   o String dob
+//   o String phone
+//   o String email
+// }
+
+// event StudentRecordUpdated {
+//   o String fname
+//   o String lname
+//   o String dob
+//   o String phone
+//   o String email
+// }

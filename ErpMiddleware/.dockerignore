@@ -1,0 +1,8 @@
+node_modules
+.dockerignore
+Dockerfile.test
+Dockerfile.build
+Dockerfile.deploy
+README.md
+setupNode.sh
+Jenkinsfile
